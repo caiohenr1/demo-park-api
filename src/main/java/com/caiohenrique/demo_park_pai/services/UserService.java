@@ -29,10 +29,18 @@ public class UserService {
     }
 
     @Transactional
-    public void updatePassword(Long id, String newPassword) {
+    public User updatePassword(Long id, String currentPassword, String newPassword, String confirmPassword) {
+        if (!newPassword.equals(confirmPassword)) {
+            throw new RuntimeException("SENHA E CONFIRMAÇÃO DE SENHA NÃO CONFEREM");
+        }
+
         User user = findById(id);
+        if (!currentPassword.equals(user.getPassword())) {
+            throw new RuntimeException("SENHA ATUAL NÃO CONFERE");
+        }
         user.setPassword(newPassword);
         userRepository.save(user);
+        return user;
     }
 
 
