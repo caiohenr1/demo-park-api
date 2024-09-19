@@ -1,5 +1,6 @@
 package com.caiohenrique.demo_park_pai.web.exeption;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.ToString;
@@ -19,6 +20,7 @@ public class ErrorMessage {
     private int status;
     private String statusText;
     private String message;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Map<String, String> errors;
 
     public ErrorMessage() {
@@ -43,7 +45,7 @@ public class ErrorMessage {
 
     public void addErrors(BindingResult result) {
         this.errors = new HashMap<>();
-        for (FieldError fieldError :  result.getFieldErrors()) {
+        for (FieldError fieldError : result.getFieldErrors()) {
             this.errors.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
     }
