@@ -66,12 +66,12 @@ public class UserController {
         return ResponseEntity.ok().body(UserMapper.toResponseDto(user));
     }
 
-    @Operation (
-            summary = "Recuperar todos os usuários cadastrados" , description = "Recurso para listar todos usuários cadastrados",
+    @Operation(
+            summary = "Recuperar todos os usuários cadastrados", description = "Recurso para listar todos usuários cadastrados",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Recurso recuperado com sucesso",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = UserResponseDto.class)))
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = UserResponseDto.class)))
             }
     )
     @GetMapping
@@ -80,8 +80,8 @@ public class UserController {
         return ResponseEntity.ok().body(UserMapper.toListResponseDto(userList));
     }
 
-    @Operation (
-            summary = "Deletar um usuário pelo id" , description = "Recurso para deletar um usuário cadastrado",
+    @Operation(
+            summary = "Deletar um usuário pelo id", description = "Recurso para deletar um usuário cadastrado",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Recurso deletado com sucesso",
                             content = @Content(mediaType = "application/json",
@@ -97,8 +97,8 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation (
-            summary = "Alterar a senha de um usuário" , description = "Recurso para alterar a senha de um usuário",
+    @Operation(
+            summary = "Alterar a senha de um usuário", description = "Recurso para alterar a senha de um usuário",
             responses = {
                     @ApiResponse(responseCode = "422", description = "Senha deve ser de apenas 6 caracteres",
                             content = @Content(mediaType = "application/json",
@@ -114,8 +114,7 @@ public class UserController {
                                     schema = @Schema(implementation = Void.class))),
             }
     )
-
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}/change-password")
     public ResponseEntity<UserResponseDto> updatePassword(@PathVariable Long id, @Valid @RequestBody UserUpdatePasswordDto updatePasswordDto) {
         User user1 = userService
                 .updatePassword(id,
@@ -124,6 +123,4 @@ public class UserController {
                         , updatePasswordDto.getConfirmPassword());
         return ResponseEntity.ok().body(UserMapper.toResponseDto(user1));
     }
-
-
 }
