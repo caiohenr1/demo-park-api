@@ -18,7 +18,7 @@ public class JwtUtils {
 
     public static final String JWT_BEARER = "Bearer ";
     public static final String JWT_AUTHORIZATION = "Authorization";
-    public static final String SECRET_KEY = "0987654321-1234567890-0987654321999";
+    public static final String SECRET_KEY = "0987654321-1234567890-0987654321";
 
     public static final long EXPIRE_DAYS = 0;
     public static final long EXPIRE_HOURS = 0;
@@ -87,6 +87,5 @@ public class JwtUtils {
         }
         return token;
     }
-
 
 }
