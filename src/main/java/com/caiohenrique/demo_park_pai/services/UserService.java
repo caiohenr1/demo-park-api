@@ -59,7 +59,7 @@ public class UserService {
         findById(id);
         try {
             userRepository.deleteById(id);
-        }catch (Exception exception) {
+        } catch (Exception exception) {
             throw new RuntimeException("USUÁRIO NÃO PODE SER EXCLUÍDO, HÁ RELAÇÃO COM OUTRA ENTIDADE");
         }
     }
