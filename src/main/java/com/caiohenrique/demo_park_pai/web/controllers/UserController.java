@@ -16,6 +16,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -60,7 +61,9 @@ public class UserController {
                                     schema = @Schema(implementation = ErrorMessage.class)))
             }
     )
+
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN') OR (hasRole('CLIENT') AND #id == authentication.principal.id)")
     public ResponseEntity<UserResponseDto> findById(@PathVariable Long id) {
         User user = userService.findById(id);
         return ResponseEntity.ok().body(UserMapper.toResponseDto(user));
