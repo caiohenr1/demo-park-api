@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -51,11 +52,15 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Buscar um usuário pelo id", description = "Recurso para buscar um usuário pelo id",
+            summary = "Buscar um usuário pelo id", description = "Requisição exige um Bearer Token. Acesso restrito a ADMIN | CLIENTE",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Usuário localizado com sucesso",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = UserResponseDto.class))),
+                    @ApiResponse(responseCode = "403", description = "Usuário sem permissão para acessar esse recurso",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class))),
                     @ApiResponse(responseCode = "404", description = "Recurso não encontrado",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class)))
@@ -70,11 +75,15 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Recuperar todos os usuários cadastrados", description = "Recurso para listar todos usuários cadastrados",
+            summary = "Recuperar todos os usuários cadastrados", description = "Requisição exige um Bearer Token. Acesso restrito a ADMIN",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Recurso recuperado com sucesso",
                             content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = UserResponseDto.class)))
+                                    schema = @Schema(implementation = UserResponseDto.class))),
+                    @ApiResponse(responseCode = "403", description = "Usuário sem permissão para acessar esse recurso",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)))
             }
     )
     @GetMapping
@@ -85,9 +94,13 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Deletar um usuário pelo id", description = "Recurso para deletar um usuário cadastrado",
+            summary = "Deletar um usuário pelo id", description = "Requisição exige um Bearer Token. Acesso restrito a ADMIN",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Recurso deletado com sucesso",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "403", description = "Usuário sem permissão para acessar esse recurso",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
                     @ApiResponse(responseCode = "404", description = "Recurso não encontrado",
@@ -96,13 +109,15 @@ public class UserController {
             }
     )
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.delete(id);
         return ResponseEntity.ok().build();
     }
 
     @Operation(
-            summary = "Alterar a senha de um usuário", description = "Recurso para alterar a senha de um usuário",
+            summary = "Alterar a senha de um usuário", description = "Requisição exige um Bearer Token. Acesso restrito a ADMIN | CLIENTE",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "422", description = "Senha deve ser de apenas 6 caracteres",
                             content = @Content(mediaType = "application/json",
@@ -111,6 +126,9 @@ public class UserController {
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
                     @ApiResponse(responseCode = "400", description = "Nova senha e confirmação de senha não conferem",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "403", description = "Usuário sem permissão para acessar esse recurso",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class))),
                     @ApiResponse(responseCode = "200", description = "Recurso alterado com sucesso",
