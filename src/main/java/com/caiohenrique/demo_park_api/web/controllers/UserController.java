@@ -48,7 +48,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserResponseDto> create(@Valid @RequestBody UserCreateDto userCreateDto) {
         User newUser = userService.create(UserMapper.toUser(userCreateDto));
-        return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toResponseDto(newUser));
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toUserResponseDto(newUser));
     }
 
     @Operation(
@@ -71,7 +71,7 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_ADMIN') OR (hasRole('CLIENT') AND #id == authentication.principal.id)")
     public ResponseEntity<UserResponseDto> findById(@PathVariable Long id) {
         User user = userService.findById(id);
-        return ResponseEntity.ok().body(UserMapper.toResponseDto(user));
+        return ResponseEntity.ok().body(UserMapper.toUserResponseDto(user));
     }
 
     @Operation(
@@ -144,6 +144,6 @@ public class UserController {
                         updatePasswordDto.getCurrentPassword()
                         , updatePasswordDto.getNewPassword()
                         , updatePasswordDto.getConfirmPassword());
-        return ResponseEntity.ok().body(UserMapper.toResponseDto(user1));
+        return ResponseEntity.ok().body(UserMapper.toUserResponseDto(user1));
     }
 }
