@@ -1,8 +1,10 @@
 package com.caiohenrique.demo_park_api.services;
 
 import com.caiohenrique.demo_park_api.entities.Client;
+import com.caiohenrique.demo_park_api.exception.EntityNotFoundException;
 import com.caiohenrique.demo_park_api.repositories.ClientRepository;
 import com.caiohenrique.demo_park_api.exception.CpfUniqueViolationException;
+import com.caiohenrique.demo_park_api.web.dto.ClientResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -23,4 +25,10 @@ public class ClientService {
         }
     }
 
+
+    public Client findById(Long id) {
+        return clientRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.format("Client id=%s não encontrado no sistema", id))
+        );
+    }
 }
