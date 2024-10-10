@@ -2,7 +2,6 @@ package com.caiohenrique.demo_park_api.web.controllers;
 
 import com.caiohenrique.demo_park_api.entities.Client;
 import com.caiohenrique.demo_park_api.jwt.JwtUserDetails;
-import com.caiohenrique.demo_park_api.repositories.ClientRepository;
 import com.caiohenrique.demo_park_api.services.ClientService;
 import com.caiohenrique.demo_park_api.services.UserService;
 import com.caiohenrique.demo_park_api.web.dto.ClientCreateDto;
@@ -17,11 +16,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "Clientes", description = "Contém todas as operações relativas ao recurso de um cliente")
 @RestController
@@ -84,5 +84,10 @@ public class ClientController {
         return ResponseEntity.ok(ClientMapper.toClientResponseDto(client));
     }
 
-
+    @GetMapping
+    @PreAuthorize(("hasRole('ADMIN')"))
+    public ResponseEntity<List<ClientResponseDto>> findAll() {
+        List<Client> clients = clientService.findAll();
+        return ResponseEntity.ok().body(ClientMapper.toListClientResponseDto(clients));
+    }
 }

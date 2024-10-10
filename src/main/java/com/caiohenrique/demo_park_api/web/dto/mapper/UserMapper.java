@@ -32,5 +32,4 @@ public class UserMapper {
        return users.stream().map(user -> toUserResponseDto(user)).collect(Collectors.toList());
     }
 
-
 }
