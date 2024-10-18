@@ -16,6 +16,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -86,8 +88,8 @@ public class ClientController {
 
     @GetMapping
     @PreAuthorize(("hasRole('ADMIN')"))
-    public ResponseEntity<List<ClientResponseDto>> findAll() {
-        List<Client> clients = clientService.findAll();
-        return ResponseEntity.ok().body(ClientMapper.toListClientResponseDto(clients));
+    public ResponseEntity<Page<Client>> findAll(Pageable pageable) {
+        Page<Client> clients = clientService.findAll(pageable);
+        return ResponseEntity.ok(clients);
     }
 }
