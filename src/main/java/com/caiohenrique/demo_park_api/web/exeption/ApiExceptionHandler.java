@@ -4,6 +4,7 @@ import com.caiohenrique.demo_park_api.exception.CpfUniqueViolationException;
 import com.caiohenrique.demo_park_api.exception.EntityNotFoundException;
 import com.caiohenrique.demo_park_api.exception.PasswordInvalidException;
 import com.caiohenrique.demo_park_api.exception.UserNameUniqueViolationException;
+import com.caiohenrique.demo_park_pai.exception.CodeUniqueViolationException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -45,7 +46,11 @@ public class ApiExceptionHandler {
     }
 
     // tratamento de username unicos - tentativa de criação de um user que ja existe
-    @ExceptionHandler({UserNameUniqueViolationException.class, CpfUniqueViolationException.class})
+    @ExceptionHandler({
+            UserNameUniqueViolationException.class,
+            CpfUniqueViolationException.class,
+            CodeUniqueViolationException.class
+    })
     public ResponseEntity<ErrorMessage> UniqueViolationException(
             RuntimeException ex,
             HttpServletRequest request) {
